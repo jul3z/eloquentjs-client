@@ -1,5 +1,4 @@
 import Connection from './Connection';
-import 'isomorphic-fetch';
 
 /**
  * RestfulJsonConnection

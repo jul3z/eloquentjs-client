@@ -2,14 +2,16 @@
   "name": "laravel-eloquentjs",
   "version": "1.1.0",
   "description": "Javascript implementation of Laravel's Eloquent API",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "jsnext:main": "dist/index.es6.js",
   "scripts": {
     "prebuild": "rm -rf dist && mkdir dist",
-    "build": "browserify src/index.js -g uglifyify -t babelify -s Eloquent --outfile dist/index.js",
+    "build": "rollup -c rollup.config.js | uglifyjs -m -o dist/index.js && rollup -c rollup.config.es6.js",
     "test": "mocha test/index.js -w --compilers js:babel/register",
     "test:single": "istanbul cover _mocha -- -R spec test/index.js --compilers js:babel/register",
     "test:travis": "istanbul cover _mocha --report lcovonly -- -R spec test/index.js --compilers js:babel/register && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "build-docs": "esdoc -c ./esdoc.json"
+    "docs": "esdoc -c ./esdoc.json",
+    "prepublish": "npm run build && npm run test:single"
   },
   "repository": {
     "type": "git",
@@ -29,8 +31,7 @@
   "homepage": "https://github.com/parsnick/eloquentjs-client#readme",
   "devDependencies": {
     "babel": "^5.8.23",
-    "babelify": "^6.4.0",
-    "browserify": "^12.0.1",
+    "babel-preset-es2015-rollup": "^1.1.1",
     "chai": "^3.3.0",
     "chai-as-promised": "^5.1.0",
     "coveralls": "^2.11.4",
@@ -39,12 +40,10 @@
     "lodash": "^3.10.1",
     "mocha": "^2.3.3",
     "mocha-lcov-reporter": "^1.0.0",
+    "rollup-plugin-babel": "^2.4.0",
     "sinon": "^1.17.1",
     "sinon-as-promised": "^4.0.0",
     "sinon-chai": "^2.8.0",
-    "uglifyify": "^3.0.1"
-  },
-  "dependencies": {
-    "isomorphic-fetch": "^2.1.1"
+    "uglify-js": "^2.6.2"
   }
 }
